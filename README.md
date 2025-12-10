@@ -1,255 +1,301 @@
-# 👨‍💻 DevConnect – Real‑Time Developer Community
 
-DevConnect is a full‑stack social platform for developers to share updates, discuss ideas, and chat in real‑time.  
-It’s intentionally scoped for portfolio use: small enough to run locally, but rich enough to showcase **JWT auth**,  
-**MongoDB data modeling**, and **Socket.io** real‑time communication.
+# 👩‍💻 DevConnect — Developer Community Platform
+
+**DevConnect** is a full-stack social networking platform built for developers to connect, collaborate, and chat in real-time.
+It’s designed as a **portfolio-grade project** showcasing modern full-stack architecture with authentication, real-time sockets, and PostgreSQL.
+
+---
+
+## 🚀 Features
+
+* 🔐 **JWT Authentication** (Register / Login / Logout)
+* 🧑‍💻 **User Profiles** with bio, skills, GitHub link, and avatars
+* 🧵 **Feed & Posts** — create, like, and manage posts
+* 💬 **Real-time Messaging** powered by Socket.io
+* 🧠 **Skill-Based Matchmaking** — find other devs by interests
+* 🌓 **Dark / Light Theme Support**
+* ⚙️ **Fully Modular Backend API** built on Express
+* ☁️ **PostgreSQL (Supabase)** integration with connection pooling
+* 🧩 **Clean UI** built with React + TailwindCSS + Vite
 
 ---
 
 ## 🧩 Tech Stack
 
-**Backend**
+### 🖥️ Frontend
 
-- Node.js + Express
-- MongoDB + Mongoose
-- JSON Web Tokens (JWT) for authentication
-- Socket.io for real‑time messaging
-- Bcrypt for password hashing
-- CORS + dotenv
+* **React 18** + **Vite**
+* **TailwindCSS** for styling
+* **Axios** for API requests
+* **Socket.io Client** for real-time chat
+* **React Context API** for auth + global state
 
-**Frontend**
+### ⚙️ Backend
 
-- Next.js (Pages Router)
-- React 18
-- Axios for HTTP requests
-- Socket.io Client
-- Simple custom CSS (no UI framework to keep things transparent)
+* **Node.js + Express**
+* **PostgreSQL (via Supabase)** with `pg` Pool
+* **JWT (jsonwebtoken)** for authentication
+* **bcryptjs** for password hashing
+* **Socket.io** for real-time WebSocket communication
+* **dotenv** for environment management
+* **CORS** for secure cross-origin access
 
 ---
 
-## 📁 Project Structure
+## 🏗️ Project Structure
 
 ```bash
 DevConnect/
-├── backend/
-│   ├── server.js              # Express + Socket.io server
-│   ├── package.json
-│   ├── config/
-│   │   └── db.js              # MongoDB connection
+├── client/                  # React + Vite Frontend
+│   ├── src/
+│   │   ├── components/      # UI components
+│   │   ├── contexts/        # AuthContext, ThemeContext
+│   │   ├── pages/           # Feed, Chat, Profile, Auth
+│   │   ├── utils/           # api.js, socket.js
+│   │   └── App.jsx
+│   ├── .env
+│   ├── vite.config.js
+│   └── package.json
+│
+├── server/                  # Express Backend
+│   ├── controllers/
+│   │   ├── authController.js
+│   │   ├── postsController.js
+│   │   └── usersController.js
+│   ├── middleware/
+│   │   └── auth.js          # JWT verification
 │   ├── models/
-│   │   ├── userModel.js       # Users (auth, profile)
-│   │   ├── postModel.js       # Posts & likes
-│   │   └── messageModel.js    # Direct messages
+│   │   └── db.js            # PostgreSQL pool (Supabase)
 │   ├── routes/
-│   │   ├── authRoutes.js      # /api/auth/*
-│   │   ├── postRoutes.js      # /api/posts/*
-│   │   ├── chatRoutes.js      # /api/chat/*
-│   │   └── authMiddleware.js  # JWT guard used across routes
-│   ├── socket/
-│   │   └── chatSocket.js      # Socket.io event handlers
-│   └── controllers/
-│       ├── authController.js  # register, login, me
-│       ├── postController.js  # CRUD + like/unlike
-│       └── chatController.js  # fetch + create messages
+│   │   ├── auth.js
+│   │   ├── posts.js
+│   │   └── users.js
+│   ├── index.js             # Express + Socket.io entry
+│   └── package.json
 │
-├── frontend/
-│   ├── next.config.js
-│   ├── package.json
-│   ├── pages/
-│   │   ├── _app.js            # Global styles
-│   │   ├── index.js           # Login / Register
-│   │   ├── dashboard.js       # Main feed
-│   │   ├── profile.js         # Minimal profile page
-│   │   └── chat.js            # Real‑time chat UI
-│   ├── components/
-│   │   ├── NavBar.jsx
-│   │   ├── PostFeed.jsx
-│   │   ├── Dashboard.jsx
-│   │   └── ChatBox.jsx
-│   └── styles/
-│       └── globals.css
-│
-├── .env.example               # Example environment configuration
 ├── .gitignore
-└── README.md
+├── README.md
+└── .env.example
 ```
 
 ---
 
-## ⚙️ Getting Started
+## ⚙️ Setup Instructions
 
 ### 1️⃣ Prerequisites
 
-- Node.js **v18+**
-- MongoDB running locally (or a connection string from MongoDB Atlas)
+* Node.js **v18+**
+* PostgreSQL database (Supabase URL or local DB)
+* npm or yarn
 
 ---
 
-### 2️⃣ Clone & Install
+### 2️⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/DevConnect.git
 cd DevConnect
 ```
 
-#### Backend
+---
+
+### 3️⃣ Setup Backend
 
 ```bash
-cd backend
+cd server
 npm install
 ```
 
-Create a `.env` file in `backend/` (you can base it on `.env.example` in the project root):
+Create a `.env` file in `/server`:
 
 ```env
-PORT=5001
-MONGO_URI=mongodb://localhost:27017/devconnect
-JWT_SECRET=replace_with_a_long_random_secret
-CLIENT_URL=http://localhost:3000
+PORT=5000
+DATABASE_URL=your_supabase_postgres_connection_url
+JWT_SECRET=your_super_secret_key
 ```
 
-Start the API + Socket.io server:
+Run the backend:
 
 ```bash
 npm run dev
 ```
 
-You should see:
+✅ You should see:
 
-```text
-✅ MongoDB connected successfully
-✅ DevConnect backend listening on http://localhost:5001
+```
+✅ Server running on port 5000
+📡 Socket.IO ready for connections
+✅ Connected to Supabase PostgreSQL
 ```
 
 ---
 
-#### Frontend
+### 4️⃣ Setup Frontend
 
 In another terminal:
 
 ```bash
-cd frontend
+cd client
 npm install
 ```
 
-Create `frontend/.env.local` (or re‑use the same values from `.env.example`):
+Create `.env` inside `/client`:
 
 ```env
-NEXT_PUBLIC_BACKEND_URL=http://localhost:5001
-NEXT_PUBLIC_SOCKET_URL=http://localhost:5001
+VITE_API_URL=http://localhost:5000/api
+VITE_SOCKET_URL=http://localhost:5000
+VITE_APP_NAME=DevConnect
+VITE_APP_ENV=development
 ```
 
-Run the Next.js dev server:
+Run the frontend:
 
 ```bash
 npm run dev
 ```
 
-Visit: **http://localhost:3000**
+Visit 👉 **[http://localhost:5173](http://localhost:5173)**
 
 ---
 
-## 🔐 Authentication Flow
+## 🔐 Authentication Endpoints
 
-- Users can **register** with name, email, and password.
-- Passwords are hashed using **bcrypt** before being stored.
-- On login, a **JWT** is issued and stored in `localStorage`:
-  - `devconnect_token`
-  - `devconnect_user`
-- Protected routes on the backend require an `Authorization: Bearer <token>` header.
+| Method | Endpoint             | Description                  |
+| ------ | -------------------- | ---------------------------- |
+| POST   | `/api/auth/register` | Register a new user          |
+| POST   | `/api/auth/login`    | Login and get JWT            |
+| GET    | `/api/auth/me`       | Fetch current logged-in user |
 
-Key endpoints:
-
-| Method | Endpoint           | Description              |
-|--------|--------------------|--------------------------|
-| POST   | `/api/auth/register` | Register a new user      |
-| POST   | `/api/auth/login`    | Login, receive JWT       |
-| GET    | `/api/auth/me`       | Get current user profile |
+Passwords are securely hashed using **bcrypt**, and tokens are signed using **JWT_SECRET**.
 
 ---
 
-## 📝 Posts & Feed
-
-- Users can create short text posts (status updates).
-- Feed shows the latest posts with author & timestamp.
-- Posts support **like / unlike**.
-
-Endpoints:
+## 🧵 Posts & Feed API
 
 | Method | Endpoint              | Description             |
-|--------|-----------------------|-------------------------|
-| GET    | `/api/posts`          | Get feed (latest posts) |
+| ------ | --------------------- | ----------------------- |
+| GET    | `/api/posts`          | Fetch all posts         |
+| GET    | `/api/posts/:id`      | Fetch post by ID        |
 | POST   | `/api/posts`          | Create a new post       |
-| PUT    | `/api/posts/:id/like` | Toggle like/unlike      |
-| DELETE | `/api/posts/:id`      | Delete own post         |
+| PUT    | `/api/posts/:id`      | Update an existing post |
+| DELETE | `/api/posts/:id`      | Delete (soft delete)    |
+| PUT    | `/api/posts/:id/like` | Like or unlike a post   |
 
-The feed is rendered by `frontend/components/PostFeed.jsx`.
+Each post stores:
 
----
-
-## 💬 Real‑Time Chat (Socket.io)
-
-- Socket.io server is attached to the same Express server.
-- Each user joins a Socket.io **room** named after their MongoDB `_id`.
-- When you send a message:
-  - It’s saved to MongoDB.
-  - Emitted in real‑time to the receiver’s room via `"receive_message"`.
-
-Socket events used:
-
-- `join` – client sends their `userId` after connecting.
-- `send_message` – client sends `{ senderId, receiverId, content }`.
-- `receive_message` – server emits to the receiver’s room.
-
-HTTP endpoints:
-
-| Method | Endpoint                | Description                        |
-|--------|-------------------------|------------------------------------|
-| GET    | `/api/chat/:otherUserId` | Get message history with a user    |
-| POST   | `/api/chat`             | Persist a new direct message       |
-
-The UI for this lives in `frontend/components/ChatBox.jsx`.  
-For demo purposes, you manually paste a **receiver user ID** (MongoDB ObjectId) to start a conversation.
-
----
-
-## 🧪 Things You Can Extend
-
-If you want to keep improving this for your portfolio:
-
-- Upload avatars & store URLs on the user model.
-- Add comments to posts (schema is already ready for it).
-- Show **online / offline** status via Socket.io rooms.
-- Add notification toasts when new messages arrive.
-- Build a “People” page that lists other developers.
-- Replace manual receiver ID with a proper conversations list.
-
----
-
-## 🧑‍💻 Scripts Reference
-
-**Backend**
-
-```bash
-cd backend
-npm run dev   # start development server with nodemon
-npm start     # start in production mode
-```
-
-**Frontend**
-
-```bash
-cd frontend
-npm run dev
-npm run build
-npm start
+```json
+{
+  "id": "uuid",
+  "user_id": "uuid",
+  "title": "string",
+  "content": "text",
+  "tags": ["frontend", "react"],
+  "likes": 12,
+  "is_active": true
+}
 ```
 
 ---
 
-## 👤 Author
+## 💬 Real-Time Chat (Socket.io)
 
-**Sree Raksha S P**
+When users log in, the frontend establishes a **Socket.io** connection with an auth token.
+Each user joins a personal room (their user ID).
 
-Feel free to fork, experiment, and adapt DevConnect into your own style of developer community.  
-It’s designed to be a **clean, interview‑ready full‑stack project** that still leaves a lot of room for your creativity 🚀
+### Events:
+
+| Event             | Direction       | Description           |
+| ----------------- | --------------- | --------------------- |
+| `connect`         | Client → Server | Auth handshake        |
+| `join`            | Client → Server | User joins their room |
+| `send_message`    | Client → Server | Send chat message     |
+| `receive_message` | Server → Client | Deliver to recipient  |
+| `disconnect`      | Socket          | Cleanup on logout     |
+
+Messages are stored in PostgreSQL (`messages` table).
+
+---
+
+## 🧠 Database Schema (Supabase / PostgreSQL)
+
+### `users`
+
+| Column        | Type      | Description         |
+| ------------- | --------- | ------------------- |
+| id            | UUID (PK) | Primary key         |
+| email         | TEXT      | Unique user email   |
+| password_hash | TEXT      | Hashed password     |
+| username      | TEXT      | Unique handle       |
+| avatar_url    | TEXT      | Profile avatar      |
+| bio           | TEXT      | Optional bio        |
+| skills        | TEXT[]    | Developer skills    |
+| github_url    | TEXT      | GitHub profile      |
+| looking_for   | TEXT[]    | Interests           |
+| theme         | TEXT      | UI theme preference |
+| created_at    | TIMESTAMP | Auto timestamp      |
+
+### `posts`
+
+| Column     | Type      | Description       |
+| ---------- | --------- | ----------------- |
+| id         | UUID (PK) | Post ID           |
+| user_id    | UUID (FK) | Author            |
+| title      | TEXT      | Post title        |
+| content    | TEXT      | Post content      |
+| tags       | TEXT[]    | Tags/hashtags     |
+| likes      | INT       | Number of likes   |
+| is_active  | BOOLEAN   | Soft delete flag  |
+| created_at | TIMESTAMP | Created timestamp |
+
+---
+
+## 🧱 Folder Highlights
+
+**Auth Context (React)**
+Manages token, user session, and API calls:
+
+```jsx
+const { user, login, logout } = useAuth();
+```
+
+**Socket Utility**
+Handles real-time connection & events:
+
+```js
+socket = io(SOCKET_URL, { auth: { token } });
+socket.emit("send_message", message);
+```
+
+---
+
+## 🧑‍🎨 UI/UX Highlights
+
+* 🎨 TailwindCSS for modern design
+* 🧘‍♀️ Clean, minimal “chill dev space” theme
+* 🌓 Theme toggle (dark/light)
+* 🪶 Responsive layout for mobile + desktop
+* 💬 Animated chat bubbles + real-time updates
+* 🧑‍💻 Developer-centric color palette
+
+---
+
+## 🧠 Future Enhancements
+
+* 🪩 GitHub OAuth login
+* 💾 Cloud storage for avatars
+* 🔔 Notifications via Socket.io
+* 🤝 Follower / match system
+* 🧮 AI-based skill similarity suggestions
+* 📊 Admin dashboard for analytics
+
+---
+
+## 🧑‍💻 Author
+
+**👩‍💻 Sree Raksha S P**
+
+> Full-stack developer passionate about building clean, connected experiences for devs.
+> Designed & built **DevConnect** to help developers find collaborators & share ideas.
+
+🌐 [Portfolio (coming soon)](#)
+🐙 [GitHub](https://github.com/YOUR_USERNAME)
