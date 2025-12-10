@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+#root {
+  @apply min-h-screen;
+}
+
+/* Custom utility classes */
+.glass-panel {
+  @apply backdrop-blur-md bg-white/5 dark:bg-black/5 border border-white/10 dark:border-white/5 rounded-2xl;
+}
+
+.glow {
+  @apply shadow-lg shadow-primary-500/10;
+}
+
+.hover-glow {
+  @apply hover:shadow-xl hover:shadow-primary-500/20 transition-shadow duration-300;
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Custom scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #5B5BF7 #1E1E2A;
+}
+
+/* Gradient border */
+.gradient-border {
+  position: relative;
+  border: double 2px transparent;
+  border-radius: 16px;
+  background-image: linear-gradient(#0E0E13, #0E0E13), 
+                    linear-gradient(135deg, #5B5BF7, #00D4A6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* Pulse animation for notifications */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Shimmer effect */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
