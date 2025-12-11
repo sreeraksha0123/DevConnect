@@ -18,17 +18,25 @@ const Feed = () => {
     loadPosts();
   }, []);
 
-  const loadPosts = async () => {
-    try {
-      const response = await api.get('/posts');
-      setPosts(response.data);
-    } catch (error) {
-      console.error('Load posts error:', error);
-    } finally {
-      setLoading(false);
+const loadPosts = async () => {
+  try {
+    const response = await api.get('/posts');
+    
+    // FIX: Access response.data.data instead of response.data
+    if (response.data && response.data.success) {
+      setPosts(response.data.data || []);  // ← CHANGED HERE
+    } else {
+      console.error('Unexpected response format:', response.data);
+      setPosts([]);
     }
-  };
-
+    
+  } catch (error) {
+    console.error('Load posts error:', error);
+    setPosts([]); // Set empty array on error
+  } finally {
+    setLoading(false);
+  }
+};
   const handleCreatePost = async (e) => {
     e.preventDefault();
     if (!newPost.title || !newPost.content) return;

@@ -30,8 +30,8 @@ export const AuthProvider = ({ children }) => {
       }
       
       try {
-        // Use fetch instead of api to avoid circular dependency
-        const response = await fetch('http://localhost:5000/auth/me', {
+        // FIXED URL: Changed from /auth/me to /api/auth/me
+        const response = await fetch('http://localhost:5000/api/auth/me', {
           headers: {
             'Authorization': `Bearer ${storedToken}`
           }
@@ -79,8 +79,8 @@ export const AuthProvider = ({ children }) => {
     console.log('🔐 Login attempt for:', email);
     
     try {
-      // Use DIRECT fetch - no api.js to avoid issues
-      const response = await fetch('http://localhost:5000/auth/login', {
+      // FIXED URL: Changed from /auth/login to /api/auth/login
+      const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -139,6 +139,8 @@ export const AuthProvider = ({ children }) => {
         errorMessage = 'Cannot connect to backend. Is it running on localhost:5000?';
       } else if (err.message.includes('401')) {
         errorMessage = 'Invalid email or password';
+      } else if (err.message.includes('404')) {
+        errorMessage = 'Backend route not found. Check if server is running.';
       } else if (err.message.includes('JSON')) {
         errorMessage = 'Backend returned invalid response';
       } else {
@@ -160,7 +162,8 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log('📝 Registration attempt:', { email, username });
       
-      const response = await fetch('http://localhost:5000/auth/register', {
+      // FIXED URL: Changed from /auth/register to /api/auth/register
+      const response = await fetch('http://localhost:5000/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -211,6 +214,8 @@ export const AuthProvider = ({ children }) => {
         errorMessage = 'Email or username already exists';
       } else if (err.message.includes('Failed to fetch')) {
         errorMessage = 'Cannot connect to server';
+      } else if (err.message.includes('404')) {
+        errorMessage = 'Registration route not found. Check if server is running.';
       } else {
         errorMessage = err.message || 'Registration failed';
       }
@@ -248,7 +253,8 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('token');
       
-      const response = await fetch('http://localhost:5000/users/profile', {
+      // FIXED URL: Changed from /users/profile to /api/users/profile
+      const response = await fetch('http://localhost:5000/api/users/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

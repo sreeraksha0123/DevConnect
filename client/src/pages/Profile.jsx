@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { LogOut, Edit, Save, X, Moon, Sun, Github, Mail, MapPin, Code, Users, Award, Camera } from 'lucide-react';
+import { LogOut, Edit, Save, X, Moon, Sun, Github, Mail, MapPin, Camera } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useNavigate } from 'react-router-dom';
+
+// Cute bot avatars - FIXED SET (no upload)
+const cuteAvatars = [
+  'https://api.dicebear.com/7.x/bottts/svg?seed=Robot',
+  'https://api.dicebear.com/7.x/bottts/svg?seed=Android',
+  'https://api.dicebear.com/7.x/bottts/svg?seed=Bot',
+  'https://api.dicebear.com/7.x/bottts/svg?seed=AI',
+  'https://api.dicebear.com/7.x/bottts/svg?seed=Machine',
+];
 
 const Profile = () => {
   const { user, logout, updateUser } = useAuth();
@@ -27,13 +36,14 @@ const Profile = () => {
   // Initialize form data when user loads
   useEffect(() => {
     if (user) {
+      // Always use bot avatars, no localStorage for custom images
       setFormData({
         username: user.username || '',
         bio: user.bio || '',
         skills: user.skills || [],
         lookingFor: user.lookingFor || [],
         githubUrl: user.githubUrl || '',
-        avatarUrl: user.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || 'user'}`,
+        avatarUrl: user.avatarUrl || cuteAvatars[0], // Always use first bot avatar as default
         location: user.location || '',
       });
     }
@@ -42,8 +52,8 @@ const Profile = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      // Update user in context (in real app, you'd call API here)
-      updateUser(formData);
+      // Update user - avatar is already a simple URL (not Base64)
+      await updateUser(formData);
       setEditing(false);
     } catch (error) {
       console.error('Update profile error:', error);
@@ -60,7 +70,7 @@ const Profile = () => {
         skills: user.skills || [],
         lookingFor: user.lookingFor || [],
         githubUrl: user.githubUrl || '',
-        avatarUrl: user.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || 'user'}`,
+        avatarUrl: user.avatarUrl || cuteAvatars[0], // Reset to saved/default avatar
         location: user.location || '',
       });
     }
@@ -104,6 +114,12 @@ const Profile = () => {
       ...formData,
       lookingFor: formData.lookingFor.filter((l) => l !== item),
     });
+  };
+
+  // Get random bot avatar
+  const getRandomBotAvatar = () => {
+    const randomIndex = Math.floor(Math.random() * cuteAvatars.length);
+    return cuteAvatars[randomIndex];
   };
 
   // Show loading state if user is not loaded yet
@@ -164,7 +180,7 @@ const Profile = () => {
         {/* Left Column - Profile Card */}
         <div className="lg:col-span-1">
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6">
-            {/* Avatar Section */}
+            {/* Avatar Section - SIMPLE, NO UPLOAD */}
             <div className="relative group mb-6">
               <div className="relative w-32 h-32 mx-auto">
                 <img
@@ -175,16 +191,24 @@ const Profile = () => {
                 {editing && (
                   <button
                     onClick={() => {
-                      // Random avatar
-                      const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${formData.username}-${Date.now()}`;
-                      setFormData({...formData, avatarUrl});
+                      // Get a random bot avatar
+                      const randomAvatar = getRandomBotAvatar();
+                      setFormData({...formData, avatarUrl: randomAvatar});
                     }}
                     className="absolute bottom-2 right-2 p-2 bg-gradient-to-r from-purple-600 to-cyan-500 text-white rounded-xl hover:shadow-lg hover:scale-110 transition-all duration-200"
+                    title="Get a random bot avatar"
                   >
                     <Camera className="w-4 h-4" />
                   </button>
                 )}
               </div>
+              {editing && (
+                <div className="mt-4 text-center">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Click <Camera className="w-3 h-3 inline mx-1" /> for a random bot avatar
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* User Info */}
