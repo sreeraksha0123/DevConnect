@@ -1,6 +1,14 @@
-"node_modules" 
-".env" 
-"dist" 
-".env" 
-".env.local" 
-"*.env" 
+# .gitignore
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Also add these
+node_modules/
+dist/
+build/
+.DS_Store
+*.log
